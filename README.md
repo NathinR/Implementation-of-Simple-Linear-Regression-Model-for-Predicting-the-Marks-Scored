@@ -17,70 +17,120 @@ To write a program to predict the marks scored by a student using the simple lin
 
 ## Program:
 ```
-/*
 Program to implement the simple linear regression model for predicting the marks scored.
 Developed by: NATHIN R
 RegisterNumber: 212222230090
-*/
 ```
 ```
-from google.colab import drive
-drive.mount('/content/drive')
 import pandas as pd
-data=pd.read_csv('/content/drive/MyDrive/Dataset-ml/student_scores.csv')
-data
-data.info()
-x=data.iloc[:,:-1].values
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.metrics import mean_absolute_error,mean_squared_error
+df=pd.read_csv('student_scores.csv')
+print(df)
+df.head(0)
+df.tail(0)
+print(df.head())
+print(df.tail())
+x = df.iloc[:,:-1].values
 print(x)
-y=data.iloc[:,:-1].values
+y = df.iloc[:,1].values
 print(y)
 from sklearn.model_selection import train_test_split
-x_train,x_test,y_train,y_test = train_test_split(x,y,test_size=1/3,random_state=0)
-print(x_train)
-print()
-print(x_test)
+x_train,x_test,y_train,y_test=train_test_split(x,y,test_size=1/3,random_state=0)
 from sklearn.linear_model import LinearRegression
-reg=LinearRegression()
-reg.fit(x_train,y_train)
-y_pred=reg.predict(x_test)
+regressor = LinearRegression()
+regressor.fit(x_train,y_train)
+y_pred = regressor.predict(x_test)
 print(y_pred)
-print(y_test )
-import matplotlib.pyplot as plt
-plt.scatter(x_train,y_train,color="green")
-plt.plot(x_train,reg.predict(x_train),color="red")
-plt.title('Training set(H vs S)')
+print(y_test)
+#Graph plot for training data
+plt.scatter(x_train,y_train,color='black')
+plt.plot(x_train,regressor.predict(x_train),color='blue')
+plt.title("Hours vs Scores(Training set)")
 plt.xlabel("Hours")
 plt.ylabel("Scores")
 plt.show()
-plt.scatter(x_test,y_test,color="blue")
-plt.plot(x_test,reg.predict(x_test),color="silver")
-plt.title('Test set(H vs S)')
+#Graph plot for test data
+plt.scatter(x_test,y_test,color='black')
+plt.plot(x_train,regressor.predict(x_train),color='red')
+plt.title("Hours vs Scores(Testing set)")
 plt.xlabel("Hours")
 plt.ylabel("Scores")
-plt
-from sklearn.metrics import mean_squared_error, mean_absolute_error
-import numpy as np
-mse=mean_squared_error(y_test,y_pred)
+plt.show()
+mse=mean_absolute_error(y_test,y_pred)
 print('MSE = ',mse)
 mae=mean_absolute_error(y_test,y_pred)
 print('MAE = ',mae)
 rmse=np.sqrt(mse)
-print('RMSE = ',rmse)
-a=np.array([[10]])
-y_pred1=reg.predict(a)
-print(y_pred1)
+print("RMSE= ",rmse)
 ```
 ## Output:
-![simple linear regression model for predicting the marks scored](sam.png)
-![image](https://github.com/NathinR/Implementation-of-Simple-Linear-Regression-Model-for-Predicting-the-Marks-Scored/assets/118679646/63f72410-cb34-4679-8954-a0257d692c09)
-![image](https://github.com/NathinR/Implementation-of-Simple-Linear-Regression-Model-for-Predicting-the-Marks-Scored/assets/118679646/d435b464-b3c2-4b52-a738-75c07b9f2b0c)
-![image](https://github.com/NathinR/Implementation-of-Simple-Linear-Regression-Model-for-Predicting-the-Marks-Scored/assets/118679646/c89037e2-1767-4aca-8266-d5f8bd1013d0)
-![image](https://github.com/NathinR/Implementation-of-Simple-Linear-Regression-Model-for-Predicting-the-Marks-Scored/assets/118679646/67c2a6eb-0c2c-47da-9bb3-b27988a778a3)
-![image](https://github.com/NathinR/Implementation-of-Simple-Linear-Regression-Model-for-Predicting-the-Marks-Scored/assets/118679646/ada3b4b1-52d2-497d-8672-b12f79f67890)
-![image](https://github.com/NathinR/Implementation-of-Simple-Linear-Regression-Model-for-Predicting-the-Marks-Scored/assets/118679646/616622c1-c64f-4eb7-be59-eca86c992e8f)
-![image](https://github.com/NathinR/Implementation-of-Simple-Linear-Regression-Model-for-Predicting-the-Marks-Scored/assets/118679646/55d6af7e-d9f7-4bf2-bf3c-6e07b25d05f5)
-![image](https://github.com/NathinR/Implementation-of-Simple-Linear-Regression-Model-for-Predicting-the-Marks-Scored/assets/118679646/3743e312-4a8b-44a0-a659-72d5687ba631)
+df.head()
+```
+   Hours  Scores
+0    2.5      21
+1    5.1      47
+2    3.2      27
+3    8.5      75
+4    3.5      30
+```
+df.tail()
+```
+    Hours  Scores
+20    2.7      30
+21    4.8      54
+22    3.8      35
+23    6.9      76
+24    7.8      86
+```
+Array values of x:
+```
+[[2.5]
+ [5.1]
+ [3.2]
+ [8.5]
+ [3.5]
+ [1.5]
+ [9.2]
+ [5.5]
+ [8.3]
+ [2.7]
+ [7.7]
+ [5.9]
+ [4.5]
+ [3.3]
+ [1.1]
+ [8.9]
+ [2.5]
+ [1.9]
+ [6.1]
+ [7.4]
+ [2.7]
+ [4.8]
+ [3.8]
+ [6.9]
+ [7.8]]
+```
+Array values of Y:
+```
+[21 47 27 75 30 20 88 60 81 25 85 62 41 42 17 95 30 24 67 69 30 54 35 76
+ 86]
+```
+Values of Y prediction:
+```
+[17.04289179 33.51695377 74.21757747 26.73351648 59.68164043 39.33132858
+ 20.91914167 78.09382734 69.37226512]
+```
+Array of Y Test:
+```
+[20 27 69 30 62 35 24 86 76]
+```
+Training set Graph:
+![265244043-f5b019a9-acd5-40df-8b4a-2fb0b3ca0b77](https://github.com/NathinR/Implementation-of-Simple-Linear-Regression-Model-for-Predicting-the-Marks-Scored/assets/118679646/c43bc131-f5cf-460c-8533-62337f7e64e8)
 
+Testing set Graph:
+![265244049-f2a3acc0-a619-4684-b17f-b154e099ab86](https://github.com/NathinR/Implementation-of-Simple-Linear-Regression-Model-for-Predicting-the-Marks-Scored/assets/118679646/be799acf-621c-49b0-8e57-36e9b9e1690a)
 
 ## Result:
 Thus the program to implement the simple linear regression model for predicting the marks scored is written and verified using python programming.
